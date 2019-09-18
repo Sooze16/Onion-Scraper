@@ -1,0 +1,130 @@
+$(document).ready(function() {
+    $("#noteForm").hide();
+    $(".savetheNote").hide();
+    $(".deletetheNote").hide();
+    $(".editting").hide();
+});
+
+var id = "";
+var titleofNote = "";
+
+// This will run the scrape route to get the articles
+$(document).on("click", "#scrape", function() {
+    location.href = "/scrape";
+});
+
+// This will save the article to the saved page
+$(document).on("click", "#saved", function() {
+
+   
+  
+    id = $(this).attr("data-id");
+
+
+    $.ajax({
+        method: "PUT",
+        url: "/articles/" + id,
+        data: {
+            savedNews: true
+        }
+    });
+});
+
+// This will delete an article from the saved page
+$(document).on("click", "#deleteFromSaved", function() {
+    id = $(this).attr("data-id");
+
+    $.ajax({
+        method: "POST",
+        url: "/articles/" + id,
+        data: {
+            savedNews: false           
+        }
+    });
+    location.href = "/saved";
+});
+
+// This will add a note to the related article
+$(document).on("click", "#addNote", function() {
+    $("#noteForm").fadeIn("slow");
+    titleofNote = $(this).attr("title-id").trim();
+    id = $(this).attr("data-id");
+
+    $.ajax({
+        method: "POST",
+        url: "/articles/" + id,
+        data: {
+            body: body
+        }
+    })
+    .done(function(data) {
+        // This empties the form
+        if (data.note) {
+            $("#noteTextArea").html(data.note.body);
+        }
+        // $("#noteSection").show();
+        // $(".editting").show();
+        // $("#saveNote").show();
+        // $("#deleteNote").show();
+        // $(".saveOrDelete").hide();
+        // $("#title").html(titleofNote);
+    });
+});
+
+// This will save the user entered note to the db
+$(document).on("click", "#saveNote", function() {
+    $("#noteForm").fadeIn("slow");
+    titleofNote = $(this).attr("title-id").trim();
+    id = $(this).attr("data-id");
+  
+    // $("#noteForm").fadeOut("slow");
+    // var body = $("#noteTextArea").val().trim();
+    // $("#noteSection").hide();
+    // $("#saveNote").show();
+     $("#deleteNote").show();
+      $("#saveNote").show();
+    // $(".editting").hide();
+alert("test")
+    $.ajax({
+        method: "POST",
+        url: "/articles/" + id,
+        data: {
+            body: body
+        }
+    })
+    .done(function(data) {
+        // This empties the form
+        if (data.note) {
+            $("#noteTextArea").html(data.note.body);
+        }
+        // $("#noteSection").show();
+        // $(".editting").show();
+        // $("#saveNote").show();
+        // $("#deleteNote").show();
+        // $(".saveOrDelete").hide();
+        // $("#title").html(titleofNote);
+    });
+});
+
+// This deletes the note from the db
+$(document).on("click", "#deleteNote", function() {
+    $("#noteForm").fadeOut("slow");
+    // This empties the form
+    document.getElementById("noteForm").reset();
+    $("#noteSection").hide();
+    $(".editNote").hide();
+    $(".editting").hide();
+    $(".saveOrDelete").show();
+
+    $.ajax({
+        method: "POST",
+        url: "/articles/" + id,
+        data: {
+            body: ""
+        }
+    })
+    .done(function(data) { 
+        $("#saveNote").hide();
+        $("#deleteNote").hide();  
+    });
+});

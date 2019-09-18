@@ -1,0 +1,13 @@
+<div class="row">
+    <div class="col-md-12 text-center welcome">
+
+        {{#each articles }}
+    <a href="{{link}}"><h2 id="welcome_title">{{title}}</h2></a>    
+    <br>
+    {{summary}}
+           
+        <button type="submit" id="saved" data-id="{{_id}}" class="btn btn-danger btn-lg">Save Article  </button>
+   
+        {{/each}}
+    </div>
+</div>
