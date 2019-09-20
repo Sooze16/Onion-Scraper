@@ -4,7 +4,7 @@
 
             <h5>{{title}}</h5>
             <button type="submit" id="addNote" data-id="{{_id}}" title-id="{{title}}" class="btn btn-info btn-sm saveOrDelete"> Add/Change Note </button>
-            <button type="submit" id="deleteNote" data-id="{{_id}}" title-id="{{title}}" class="btn btn-danger btn-sm saveOrDelete"> Delete from Saved </button>
+            <button type="submit" id="deleteFromSaved" data-id="{{_id}}" title-id="{{title}}" class="btn btn-danger btn-sm saveOrDelete"> Delete from Saved </button>
             <a target="_blank" class="linktags" href= {{link}}> {{link}} </a>
             {{!--<br>
             {{pic}}--}}
@@ -20,8 +20,8 @@
                 </h5>
                 <textarea class="form-control" id="noteTextArea" rows="5"></textarea>
                 <br>
-                <button type="submit" id="saveNote" data-id="" title-id="" class="btn btn-success savetheNote"> Save this Note </button>
-                <button type="submit" id="deleteNote" data-id="" title-id="" class="btn btn-danger deletetheNote"> Delete this Note </button>
+                <button type="submit" id="saveNote" data-id="{{_id}}" title-id="" class="btn btn-success savetheNote"> Save this Note </button>
+                <button type="submit" id="deleteComment" data-id="{{_id}}" title-id="" class="btn btn-danger deletetheNote"> Delete this Note </button>
             </div>
         </form>
     </div>

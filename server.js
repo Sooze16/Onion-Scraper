@@ -78,7 +78,7 @@ app.get("/scrape", function(req, res) {
     });
 
     // Send a message to the client
-    res.send("Scrape Complete");
+    res.redirect("/");
   });
 });
 
@@ -120,13 +120,20 @@ console.log("saved")
 
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function(req, res) {
+  
+ 
   // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
   db.Article.findOne({ _id: req.params.id })
     // ..and populate all of the notes associated with it
     .populate("note")
     .then(function(dbArticle) {
       // If we were able to successfully find an Article with the given id, send it back to the client
-      res.json(dbArticle);
+      console.log("get data to client:"+dbArticle)
+
+      if(dbArticle!==undefined)
+          res.json(dbArticle);
+      else
+         res.json({note: "blank"});
     })
     .catch(function(err) {
       // If an error occurred, send it to the client
@@ -137,6 +144,9 @@ app.get("/articles/:id", function(req, res) {
 // Route for saving/updating an Article's associated Note
 app.post("/articles/:id", function(req, res) {
   // Create a new note and pass the req.body to the entry
+
+  console.log("articles:"+req.params.id)
+
   db.Note.create(req.body)
     .then(function(dbNote) {
       // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
@@ -157,7 +167,7 @@ app.post("/articles/:id", function(req, res) {
 
 app.put("/articles/:id",function(req,res){
 console.log(req.params.id)
-  db.Article.findByIdAndUpdate(req.params.id, { savedNews: true },  function(){
+  db.Article.findByIdAndUpdate(req.params.id, { savedNews: req.body.savedNews },  function(){
     res.redirect("/")
   })
   

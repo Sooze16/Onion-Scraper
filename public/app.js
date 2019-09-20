@@ -5,7 +5,7 @@ $(document).ready(function() {
     $(".editting").hide();
 });
 
-var id = "";
+var storedClickId= "";
 var titleofNote = "";
 
 // This will run the scrape route to get the articles
@@ -32,10 +32,11 @@ $(document).on("click", "#saved", function() {
 
 // This will delete an article from the saved page
 $(document).on("click", "#deleteFromSaved", function() {
-    id = $(this).attr("data-id");
+   var id = $(this).attr("data-id");
 
+   //alert("/articles/" + id)
     $.ajax({
-        method: "POST",
+        method: "PUT",
         url: "/articles/" + id,
         data: {
             savedNews: false           
@@ -46,28 +47,31 @@ $(document).on("click", "#deleteFromSaved", function() {
 
 // This will add a note to the related article
 $(document).on("click", "#addNote", function() {
+    // alert("clicked")
     $("#noteForm").fadeIn("slow");
     titleofNote = $(this).attr("title-id").trim();
-    id = $(this).attr("data-id");
+    var id = $(this).attr("data-id");
+    storedClickId= id ;
+    $("#noteSection").show();
+    $(".editting").show();
+    $("#saveNote").show();
+    $("#deleteComment").show();
+    $(".saveOrDelete").hide();
 
+    console.log( "/articles/" + id )
     $.ajax({
-        method: "POST",
-        url: "/articles/" + id,
-        data: {
-            body: body
-        }
+        method: "GET",
+        url: "/articles/" + id 
+      
     })
-    .done(function(data) {
+    .done(function(response) {
         // This empties the form
-        if (data.note) {
-            $("#noteTextArea").html(data.note.body);
+         console.log("data:"+response.note )
+        if (response.note !== undefined) {
+            $("#noteTextArea").html(response.note.body);
         }
-        // $("#noteSection").show();
-        // $(".editting").show();
-        // $("#saveNote").show();
-        // $("#deleteNote").show();
-        // $(".saveOrDelete").hide();
-        // $("#title").html(titleofNote);
+        
+        $("#title").html(titleofNote);
     });
 });
 
@@ -75,21 +79,23 @@ $(document).on("click", "#addNote", function() {
 $(document).on("click", "#saveNote", function() {
     $("#noteForm").fadeIn("slow");
     titleofNote = $(this).attr("title-id").trim();
-    id = $(this).attr("data-id");
+   
   
-    // $("#noteForm").fadeOut("slow");
-    // var body = $("#noteTextArea").val().trim();
-    // $("#noteSection").hide();
-    // $("#saveNote").show();
+    $("#noteForm").fadeOut("slow");
+     
+    $("#noteSection").show();
+    $("#saveNote").show();
      $("#deleteNote").show();
       $("#saveNote").show();
-    // $(".editting").hide();
-alert("test")
+    $(".editting").hide();
+ 
+
+    
     $.ajax({
         method: "POST",
-        url: "/articles/" + id,
+        url: "/articles/" +  storedClickId,
         data: {
-            body: body
+            body: $("#noteTextArea").val().trim()
         }
     })
     .done(function(data) {
@@ -97,17 +103,25 @@ alert("test")
         if (data.note) {
             $("#noteTextArea").html(data.note.body);
         }
-        // $("#noteSection").show();
-        // $(".editting").show();
-        // $("#saveNote").show();
-        // $("#deleteNote").show();
-        // $(".saveOrDelete").hide();
-        // $("#title").html(titleofNote);
+       
     });
+
+
+    
+
+    $("#noteSection").show();
+    $(".editting").show();
+    $("#saveNote").show();
+
+    $("#addNote").show();
+    $("#deleteNote").show();
+    $("#deleteNote").show();
+    // $(".saveOrDelete").hide();
+    $("#title").html(titleofNote);
 });
 
 // This deletes the note from the db
-$(document).on("click", "#deleteNote", function() {
+$(document).on("click", "#deleteComment", function() {
     $("#noteForm").fadeOut("slow");
     // This empties the form
     document.getElementById("noteForm").reset();
@@ -118,13 +132,13 @@ $(document).on("click", "#deleteNote", function() {
 
     $.ajax({
         method: "POST",
-        url: "/articles/" + id,
+        url: "/articles/" +  storedClickId,
         data: {
             body: ""
         }
     })
     .done(function(data) { 
-        $("#saveNote").hide();
-        $("#deleteNote").hide();  
+        $("#saveNote").show();
+        $("#deleteNote").show();  
     });
 });

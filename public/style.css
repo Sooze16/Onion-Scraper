@@ -1,8 +1,10 @@
 body {
-	background-image: url("onion_bg.jpg");
+	background-image: url("cogs.jpg");
 	background-size: cover;
-	color: white;
+	color: rgb(163, 63, 63);
 	font-family: 'Nova Round', cursive;
+	
+
 }
 
 #rowArea {
@@ -30,6 +32,9 @@ body {
 #welcome_title {
 	background-color: #292b2c;
 	border: solid 3px;
+	margin-top: 10px;
+
+
 }
 
 .linktags {
